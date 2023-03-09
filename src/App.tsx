@@ -1,24 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
+import {
+    useEffect,
+    useState,
+    useRef,
+} from "react";
 import './App.css';
+
+function Countdown()
+{
+  const dob = useRef<Date>((new Date(0)));
+  const [difference, setDifference] = useState(Math.floor((Date.now() - dob.current.getTime())/1000));
+  useEffect(() => {
+    setInterval(() => {
+      setDifference(Math.floor((Date.now() - dob.current.getTime())/1000));
+    }, 1000);
+  }, []);
+    return <>
+    <input
+        type={"date"}
+        value={dob.current.toLocaleDateString('en-CA')}
+        max = {new Date().getDate().toLocaleString('en-CA')}
+        onChange = {e => (dob.current = e.target.valueAsDate ?? new Date(0))}
+    />
+    <br/><br/>
+    <>Вы прожили {difference} секунд</>
+  </>
+}
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Countdown/>
     </div>
   );
 }
